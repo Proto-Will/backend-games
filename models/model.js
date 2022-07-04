@@ -1,5 +1,7 @@
-const db = require("../db/data/test-data/index")
+const db = require("../db/connection")
 
-selectAllCategories = (categories) => {
-    return db.categoryData
+selectAllCategories = () => {
+    return db.query("SELECT * FROM categories;").then((categories) => {
+        return categories.rows;
+    })
 };

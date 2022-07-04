@@ -1,11 +1,17 @@
 const request = require("supertest")
-const app = require("../app.js")
-const db = require("../db/data/test-data/index")
+const app = require("../app")
+const db = require("../db/connection")
 require('../controllers/controller');
+const seed = require("../db/seeds/seed")
+const testData = require("../db/data/test-data/index")
 
 afterAll(() => {
     if (db.end) db.end();
 });
+
+beforeEach(() => {
+    return seed(testData)
+})
 
 
 describe('app', () => {
@@ -30,7 +36,7 @@ describe('app', () => {
             .get('/api/categories')
             .expect(200)
             .then(({ body }) => {
-                expect(body).toEqual(result)
+                expect(body).toEqual({categories: result})
             })
         })
     })

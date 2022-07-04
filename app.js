@@ -9,7 +9,17 @@ app.use((err, req, res, next) => {
     else next()
 })
 
+
+
+
 app.get('/api/categories', getCategories);
+
+
+
+app.use((err, req, res, next) => {
+    if(err.msg && err.status) console.log(err.status, err.msg)
+    else next()
+})
 
 app.use((err, req, res, next) => {
     console.log(err)
