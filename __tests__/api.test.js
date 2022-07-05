@@ -40,29 +40,27 @@ describe('app', () => {
             })
         })
     })
-    // describe("1. GET /api/reviews", () => {
-    //     test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
-    //         return request(app)
-    //         .get('/api/reviews/3')
-    //         .expect(200)
-    //         .then(({ body }) => {
-    //           const { review } = body;
-    //           // expect(review).toBeInstanceOf(Array);
-    //               expect(review[0]).toEqual(
-    //                     expect.objectContaining({
-    //                       review_id: expect.any(Number),
-    //                       title: expect.any(String),
-    //                       review_body: expect.any(String),
-    //                       designer: expect.any(String),
-    //                       review_img_url: expect.any(String),
-    //                       votes: expect.any(Number),
-    //                       category: expect.any(String),
-    //                       owner: expect.any(String),
-    //                       created_at: expect.any(Date)
-    //                     })
-    //                )
-              
-    //         })
-    //     })
-    // })
+    describe("2. GET /api/reviews/:review_id", () => {
+        test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
+         const result = {
+            "category": "dexterity",
+            "created_at": "2021-01-18T10:01:41.251Z",
+            "designer": "Leslie Scott",
+            "owner": "philippaclaire9",
+            "review_body": "Fiddly fun for all the family",
+            "review_id": 2,
+            "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            "title": "Jenga",
+            "votes": 5,
+              }  
+          return request(app)
+            .get('/api/reviews/2')
+            .expect(200)
+            .then(({ body }) => {
+              const { review } = body;
+                  expect(review).toEqual(result)
+            })
+        })
+    })
+
 })
