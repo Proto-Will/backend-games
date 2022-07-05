@@ -58,8 +58,7 @@ describe('app', () => {
             .expect(200)
             .then(({ body }) => {
               const { review } = body;
-              expect(review).toBeInstanceOf(Array);
-                  expect(review[0]).toEqual(result)
+                  expect(review).toEqual(result)
             })
         })
     })
