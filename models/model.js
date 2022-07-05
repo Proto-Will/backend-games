@@ -12,3 +12,4 @@ selectReviewById = (id) => {
         return review.rows;
     })
 }
+
