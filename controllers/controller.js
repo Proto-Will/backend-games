@@ -14,3 +14,10 @@ getReviewById = (req, res) => {
     })
 }
 
+patchReviewById = (req, res) => {
+  const {review_id} = req.params;
+    const {inc_votes} = req.body;
+    updateReviewById(review_id, inc_votes).then((review) => {
+      res.status(200).send({ review })
+    })
+}

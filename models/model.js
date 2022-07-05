@@ -13,3 +13,9 @@ selectReviewById = (id) => {
     })
 }
 
+updateReviewById = (id, inc_votes) => {
+    return db.query(`UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`, [inc_votes, id])
+    .then((review) => {
+        return review.rows[0];
+    })
+}

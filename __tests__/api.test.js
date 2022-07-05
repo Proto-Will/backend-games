@@ -62,5 +62,57 @@ describe('app', () => {
             })
         })
     })
+    describe("3. PATCH /api/reviews/:review_id", () => {
+        test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
+          const newReviewInfo = {
+            inc_votes: 1
+          };
+          const finalResult = {
+            "category": "dexterity",
+            "created_at": "2021-01-18T10:01:41.251Z",
+            "designer": "Leslie Scott",
+            "owner": "philippaclaire9",
+            "review_body": "Fiddly fun for all the family",
+            "review_id": 2,
+            "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            "title": "Jenga",
+            "votes": 6,
+              }  
+          return request(app)
+            .patch('/api/reviews/2')
+            .send(newReviewInfo)
+            .expect(200)
+            .then(({ body }) => {
+              const { review } = body;
+                  expect(review).toEqual(finalResult)
+            })
+        })
+    })
+    describe("4. PATCH /api/reviews/:review_id", () => {
+        test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
+          const newReviewInfo = {
+            inc_votes: -100
+          };
+          const finalResult = {
+            "category": "dexterity",
+            "created_at": "2021-01-18T10:01:41.251Z",
+            "designer": "Leslie Scott",
+            "owner": "philippaclaire9",
+            "review_body": "Fiddly fun for all the family",
+            "review_id": 2,
+            "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            "title": "Jenga",
+            "votes": -95,
+              }  
+          return request(app)
+            .patch('/api/reviews/2')
+            .send(newReviewInfo)
+            .expect(200)
+            .then(({ body }) => {
+              const { review } = body;
+                  expect(review).toEqual(finalResult)
+            })
+        })
+    })
 
 })
