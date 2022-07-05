@@ -4,21 +4,13 @@ require('./controllers/controller');
 const app = express();
 app.use(express.json());
 
-app.use((err, req, res, next) => {
-    if(err) console.log(err)
-    else next()
-})
-
-
-
 
 app.get('/api/categories', getCategories);
 
 
 
-app.use((err, req, res, next) => {
-    if(err.msg && err.status) console.log(err.status, err.msg)
-    else next()
+app.all('*', (req, res) => {
+    res.status(404).send({msg: "404 not found"})
 })
 
 app.use((err, req, res, next) => {
