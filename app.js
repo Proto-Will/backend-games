@@ -12,7 +12,15 @@ app.patch('/api/reviews/:review_id', patchReviewById)
 
 
 app.all('*', (req, res) => {
-    res.status(404).send({msg: "404 not found"})
+    res.status(404).send({msg: "Invalid Path"})
+})
+
+app.use((err, req, res, next) => {
+    if (err.status && err.msg) {
+        res.status(err.status).send({ msg: err.msg })
+    } else {
+        next(err)
+    }
 })
 
 app.use((err, req, res, next) => {

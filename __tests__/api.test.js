@@ -39,29 +39,47 @@ describe('app', () => {
                 expect(body).toEqual({categories: result})
             })
         })
-    })
-    describe("2. GET /api/reviews/:review_id", () => {
-        test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
-         const result = {
-            "category": "dexterity",
-            "created_at": "2021-01-18T10:01:41.251Z",
-            "designer": "Leslie Scott",
-            "owner": "philippaclaire9",
-            "review_body": "Fiddly fun for all the family",
-            "review_id": 2,
-            "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-            "title": "Jenga",
-            "votes": 5,
-              }  
+        test('404; handles bad paths', () => {
           return request(app)
-            .get('/api/reviews/2')
-            .expect(200)
-            .then(({ body }) => {
-              const { review } = body;
-                  expect(review).toEqual(result)
-            })
+          .get('/api/bad_path')
+          .expect(404)
+          .then(({body: { msg }}) => {
+            expect(msg).toBe('Invalid Path')
+          })
         })
     })
+
+    describe("2. GET /api/reviews/:review_id", () => {
+      test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
+        const result = {
+          "category": "dexterity",
+          "created_at": "2021-01-18T10:01:41.251Z",
+          "designer": "Leslie Scott",
+          "owner": "philippaclaire9",
+          "review_body": "Fiddly fun for all the family",
+          "review_id": 2,
+          "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          "title": "Jenga",
+          "votes": 5,
+            }  
+        return request(app)
+          .get('/api/reviews/2')
+          .expect(200)
+          .then(({ body }) => {
+            const { review } = body;
+                expect(review).toEqual(result)
+          })
+      })
+      test('404; handles incorrect id', () => {
+        return request(app)
+        .get('/api/reviews/50')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('No review found for review_id: 50')
+        })
+      })
+    })
+
     describe("3. PATCH /api/reviews/:review_id", () => {
         test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
           const newReviewInfo = {
@@ -88,6 +106,7 @@ describe('app', () => {
             })
         })
     })
+
     describe("4. PATCH /api/reviews/:review_id", () => {
         test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
           const newReviewInfo = {
@@ -112,7 +131,14 @@ describe('app', () => {
               const { review } = body;
                   expect(review).toEqual(finalResult)
             })
-        })
+          })
+          test('404; handles incorrect id number', () => {
+            return request(app)
+            .patch('/api/reviews/50')
+            .expect(404)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('No review found for review_id: 50')
+            })
+          })
     })
-
 })
