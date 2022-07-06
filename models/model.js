@@ -7,7 +7,10 @@ selectAllCategories = () => {
 };
 
 selectReviewById = (id) => {
-    return db.query(`SELECT * FROM reviews WHERE review_id = $1;`, [id])
+    return db.query(`SELECT reviews.*, COUNT(comments.comment_id) AS comment_count 
+                     FROM reviews JOIN comments ON comments.review_id = reviews.review_id 
+                     WHERE reviews.review_id = $1
+                     GROUP BY comments.review_id, comments.comment_id, reviews.review_id;`, [id])
     .then((reviews) => {
         const review = reviews.rows[0];
         if (!review) {
