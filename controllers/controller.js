@@ -32,3 +32,9 @@ getUsers = (req, res) => {
       res.status(200).send({ users })
     })
 }
+
+getReviews = (req, res) => {
+  selectAllReviews().then((reviews) => {
+      res.status(200).send({ reviews })
+    })
+}

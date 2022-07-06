@@ -10,6 +10,7 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews/:review_id', getReviewById);
 app.patch('/api/reviews/:review_id', patchReviewById);
 app.get ('/api/users', getUsers);
+app.get ('/api/reviews', getReviews);
 
 
 app.all('*', (req, res) => {

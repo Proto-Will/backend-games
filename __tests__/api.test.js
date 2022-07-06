@@ -217,8 +217,38 @@ describe('app', () => {
                   title: expect.any(String),
                   votes: expect.any(Number),
                   comment_count: expect.any(String)
-                }))
+                })
+              )
         })
       })
     })
+
+    describe("6. GET /api/reviews", () => {
+      test('should return an array of review objects sorted by date', () => {
+        return request(app)
+          .get('/api/reviews')
+          .expect(200)
+          .then(({ body }) => {
+            const { reviews } = body;
+            expect(reviews).toBeSortedBy('created_at', {descending: true});
+            expect(reviews).toBeInstanceOf(Array);
+            reviews.forEach((review) => {
+              expect(review).toEqual(
+                expect.objectContaining({
+                  category: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_body: expect.any(String),
+                  review_id: expect.any(Number),
+                  review_img_url: expect.any(String),
+                  title: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(String)
+                })
+              )
+            })
+          })
+        })
+      })
 })
