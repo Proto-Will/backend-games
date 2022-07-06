@@ -232,6 +232,7 @@ describe('app', () => {
             const { reviews } = body;
             expect(reviews).toBeSortedBy('created_at', {descending: true});
             expect(reviews).toBeInstanceOf(Array);
+            expect(reviews).toHaveLength(6);
             reviews.forEach((review) => {
               expect(review).toEqual(
                 expect.objectContaining({
