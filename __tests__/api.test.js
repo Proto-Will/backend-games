@@ -105,9 +105,6 @@ describe('app', () => {
                   expect(review).toEqual(finalResult)
             })
         })
-    })
-
-    describe("4. PATCH /api/reviews/:review_id", () => {
         test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
           const newReviewInfo = {
             inc_votes: -100
@@ -155,6 +152,30 @@ describe('app', () => {
               expect(msg).toBe('Invalid Packet')
             })
           })
-    })
+          
+          test('404; handles packet values as string', () => {
+            const newReviewInfo = {
+              inc_votes: "bad_data"};
+            return request(app)
+            .patch('/api/reviews/2')
+            .send(newReviewInfo)
+            .expect(404)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('Invalid Packet')
+            })
+          })
+          
+          test('404; handles id as string ', () => {
+            const newReviewInfo = {
+              inc_votes: -100};
+            return request(app)
+            .patch('/api/reviews/string')
+            .send(newReviewInfo)
+            .expect(404)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('Invalid ID')
+            })
+          })
+      })
 
 })
