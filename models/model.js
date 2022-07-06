@@ -45,3 +45,9 @@ updateReviewById = (id, inc_votes) => {
         return review;
     })
 }
+
+selectAllUsers = () => {
+    return db.query("SELECT * FROM users;").then((users) => {
+        return users.rows;
+    })
+};

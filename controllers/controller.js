@@ -26,3 +26,9 @@ patchReviewById = (req, res, next) => {
       next(err)
     })
 }
+
+getUsers = (req, res) => {
+  selectAllUsers().then((users) => {
+      res.status(200).send({ users })
+    })
+}
