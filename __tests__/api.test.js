@@ -133,12 +133,28 @@ describe('app', () => {
             })
           })
           test('404; handles incorrect id number', () => {
+            const newReviewInfo = {
+              inc_votes: -100
+            };
             return request(app)
             .patch('/api/reviews/50')
+            .send(newReviewInfo)
             .expect(404)
             .then(({body: { msg }}) => {         
               expect(msg).toBe('No review found for review_id: 50')
             })
           })
+          
+          test('404; handles incorrect packet info', () => {
+            const newReviewInfo = {};
+            return request(app)
+            .patch('/api/reviews/2')
+            .send(newReviewInfo)
+            .expect(404)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('Invalid Packet')
+            })
+          })
     })
+
 })

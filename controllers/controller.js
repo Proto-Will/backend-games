@@ -18,7 +18,8 @@ getReviewById = (req, res, next) => {
 
 patchReviewById = (req, res, next) => {
   const {review_id} = req.params;
-    const {inc_votes} = req.body;
+    let {inc_votes} = req.body;
+    if (!inc_votes) inc_votes = "invalid"
     updateReviewById(review_id, inc_votes).then((review) => {
       res.status(200).send({ review })
     }).catch((err) => {

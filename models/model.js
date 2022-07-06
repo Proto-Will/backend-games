@@ -21,6 +21,12 @@ selectReviewById = (id) => {
 }
 
 updateReviewById = (id, inc_votes) => {
+    if (typeof inc_votes != "number") { console.log(inc_votes)
+        return Promise.reject({
+        status: 404,
+        msg: `Invalid Packet`,
+      });
+    }
     return db.query(`UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`, [inc_votes, id])
     .then((reviews) => {
         const review = reviews.rows[0];
