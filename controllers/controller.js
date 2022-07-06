@@ -7,10 +7,22 @@ getCategories = (req, res) => {
     })
 }
 
-getReviewById = (req, res) => {
+getReviewById = (req, res, next) => {
   const {review_id} = req.params;
   selectReviewById(review_id).then((review) => {
       res.status(200).send({ review })
+    }).catch((err) => {
+      next(err)
     })
 }
 
+patchReviewById = (req, res, next) => {
+  const {review_id} = req.params;
+    let {inc_votes} = req.body;
+    if (!inc_votes) inc_votes = "invalid"
+    updateReviewById(review_id, inc_votes).then((review) => {
+      res.status(200).send({ review })
+    }).catch((err) => {
+      next(err)
+    })
+}
