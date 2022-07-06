@@ -17,26 +17,19 @@ beforeEach(() => {
 describe('app', () => {
     describe("1. GET /api/categories", () => {
         test('should return  an array of category objects, each of which should have the following properties: - slug description', () => {
-            const result = [
-                {
-                  slug: 'euro game',
-                  description: 'Abstact games that involve little luck'
-                },
-                {
-                  slug: 'social deduction',
-                  description: "Players attempt to uncover each other's hidden role"
-                },
-                { slug: 'dexterity', description: 'Games involving physical skill' },
-                {
-                  slug: "children's games",
-                  description: 'Games suitable for children'
-                }
-              ]
             return request(app)
             .get('/api/categories')
             .expect(200)
             .then(({ body }) => {
-                expect(body).toEqual({categories: result})
+              const { categories } = body;
+              expect(categories).toBeInstanceOf(Array);
+              categories.forEach((category) => {
+                  expect(category).toEqual(
+                    expect.objectContaining({
+                      slug: expect.any(String),
+                      description: expect.any(String)
+                  }))
+              })
             })
         })
         test('404; handles bad paths', () => {
@@ -52,22 +45,32 @@ describe('app', () => {
     describe("2. GET /api/reviews/:review_id", () => {
       test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
         const result = {
-          "category": "dexterity",
-          "created_at": "2021-01-18T10:01:41.251Z",
-          "designer": "Leslie Scott",
-          "owner": "philippaclaire9",
-          "review_body": "Fiddly fun for all the family",
-          "review_id": 2,
-          "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-          "title": "Jenga",
-          "votes": 5,
+          category: "dexterity",
+          created_at: "2021-01-18T10:01:41.251Z",
+          designer: "Leslie Scott",
+          owner: "philippaclaire9",
+          review_body: "Fiddly fun for all the family",
+          review_id: 2,
+          review_img_url: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          title: "Jenga",
+          votes: 5,
             }  
         return request(app)
           .get('/api/reviews/2')
           .expect(200)
           .then(({ body }) => {
             const { review } = body;
-                expect(review).toEqual(result)
+                expect(review).toEqual(
+                  expect.objectContaining({
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_body: expect.any(String),
+                    review_id: expect.any(Number),
+                    review_img_url: expect.any(String),
+                    title: expect.any(String),
+                    votes: expect.any(Number) }))
           })
       })
       test('404; handles incorrect id', () => {
@@ -177,5 +180,34 @@ describe('app', () => {
             })
           })
       })
+
+      
+    describe("4. GET /api/users", () => {
+      test('should return  an array of objects, each object should have the following property -username -name -avatar_url', () => {
+          return request(app)
+          .get('/api/users')
+          .expect(200)
+          .then(({ body }) => {
+            const { users } = body;
+            expect(users).toBeInstanceOf(Array);
+            users.forEach((user) => {
+                expect(user).toEqual(
+                  expect.objectContaining({
+                    avatar_url: expect.any(String),
+                    name: expect.any(String),
+                    username: expect.any(String),
+                }))
+            })
+          })
+      })
+      test('404; handles bad paths', () => {
+        return request(app)
+        .get('/api/bad_path')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('Invalid Path')
+        })
+      })
+  })
 
 })
