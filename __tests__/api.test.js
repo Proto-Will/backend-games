@@ -44,17 +44,6 @@ describe('app', () => {
 
     describe("2. GET /api/reviews/:review_id", () => {
       test('should return a review objectwhich should have the following properties : review_id, title, review_body, designer, review_img_url, votes, category, owner, created_at', () => {
-        const result = {
-          category: "dexterity",
-          created_at: "2021-01-18T10:01:41.251Z",
-          designer: "Leslie Scott",
-          owner: "philippaclaire9",
-          review_body: "Fiddly fun for all the family",
-          review_id: 2,
-          review_img_url: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-          title: "Jenga",
-          votes: 5,
-            }  
         return request(app)
           .get('/api/reviews/2')
           .expect(200)
@@ -180,7 +169,6 @@ describe('app', () => {
             })
           })
       })
-
       
     describe("4. GET /api/users", () => {
       test('should return  an array of objects, each object should have the following property -username -name -avatar_url', () => {
@@ -208,6 +196,29 @@ describe('app', () => {
           expect(msg).toBe('Invalid Path')
         })
       })
-  })
-
+      })
+      
+  describe("5. GET /api/reviews/:review_id", () => {
+    test('should return a review object with comment_count added on', () => {
+      return request(app)
+        .get('/api/reviews/2')
+        .expect(200)
+        .then(({ body }) => {
+          const { review } = body;
+              expect(review).toEqual(
+                expect.objectContaining({
+                  category: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_body: expect.any(String),
+                  review_id: expect.any(Number),
+                  review_img_url: expect.any(String),
+                  title: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(String)
+                }))
+        })
+      })
+    })
 })
