@@ -276,5 +276,31 @@ describe('app', () => {
           })
         })
       })
+      test('404; handles incorrect id', () => {
+        return request(app)
+        .get('/api/reviews/50/comments')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('No comment found for review_id: 50')
+        })
+      })
+      test('404; handles id with no comments', () => {
+        return request(app)
+        .get('/api/reviews/1/comments')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('No comment found for review_id: 1')
+        })
+      })
+      test('404; handles id that is not a number', () => {
+        return request(app)
+        .get('/api/reviews/bad_request/comments')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('Invalid ID')
+        })
+      })
     })
+    
+    
 })
