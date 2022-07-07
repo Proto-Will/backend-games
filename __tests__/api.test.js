@@ -168,7 +168,7 @@ describe('app', () => {
               expect(msg).toBe('Invalid ID')
             })
           })
-      })
+    })
       
     describe("4. GET /api/users", () => {
       test('should return  an array of objects, each object should have the following property -username -name -avatar_url', () => {
@@ -196,9 +196,9 @@ describe('app', () => {
           expect(msg).toBe('Invalid Path')
         })
       })
-      })
+    })
       
-  describe("5. GET /api/reviews/:review_id", () => {
+    describe("5. GET /api/reviews/:review_id", () => {
     test('should return a review object with comment_count added on', () => {
       return request(app)
         .get('/api/reviews/2')
@@ -223,37 +223,37 @@ describe('app', () => {
       })
     })
 
-  describe("6. GET /api/reviews", () => {
-    test('should return an array of review objects sorted by date', () => {
-      return request(app)
-        .get('/api/reviews')
-        .expect(200)
-        .then(({ body }) => {
-          const { reviews } = body;
-          expect(reviews).toBeSortedBy('created_at', {descending: true});
-          expect(reviews).toBeInstanceOf(Array);
-          expect(reviews).toHaveLength(6);
-          reviews.forEach((review) => {
-            expect(review).toEqual(
-              expect.objectContaining({
-                category: expect.any(String),
-                created_at: expect.any(String),
-                designer: expect.any(String),
-                owner: expect.any(String),
-                review_body: expect.any(String),
-                review_id: expect.any(Number),
-                review_img_url: expect.any(String),
-                title: expect.any(String),
-                votes: expect.any(Number),
-                comment_count: expect.any(String)
-              })
-            )
+    describe("6. GET /api/reviews", () => {
+      test('should return an array of review objects sorted by date', () => {
+        return request(app)
+          .get('/api/reviews')
+          .expect(200)
+          .then(({ body }) => {
+            const { reviews } = body;
+            expect(reviews).toBeSortedBy('created_at', {descending: true});
+            expect(reviews).toBeInstanceOf(Array);
+            expect(reviews).toHaveLength(6);
+            reviews.forEach((review) => {
+              expect(review).toEqual(
+                expect.objectContaining({
+                  category: expect.any(String),
+                  created_at: expect.any(String),
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_body: expect.any(String),
+                  review_id: expect.any(Number),
+                  review_img_url: expect.any(String),
+                  title: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(String)
+                })
+              )
+            })
           })
         })
-      })
-  })
+    })
 
-  describe("7. GET /api/reviews/:review_id/comments", () => {
+    describe("7. GET /api/reviews/:review_id/comments", () => {
     test('should return an array of comment objects relating to review_id', () => {
       return request(app)
         .get('/api/reviews/3/comments')
@@ -276,5 +276,5 @@ describe('app', () => {
           })
         })
       })
-  })
+    })
 })
