@@ -74,13 +74,6 @@ selectReviewCommentsById = (id) => {
     return db.query(`SELECT comments.*
                     FROM comments 
                     WHERE comments.review_id = $1;`, [id]).then((comments) => {
-    const comment = comments.rows[0];
-    if (!comment) {
-      return Promise.reject({
-        status: 404,
-        msg: `No comment found for review_id: ${id}`,
-      });
-    }
     return comments.rows;
   })
 };

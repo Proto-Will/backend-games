@@ -42,7 +42,10 @@ getReviews = (req, res) => {
 getReviewComments = (req, res, next) => {
   const {review_id} = req.params;
   selectReviewCommentsById(review_id).then((comments) => {
-      res.status(200).send({ comments })
+    if (!comments[0]) {
+      res.status(204).send({})
+    }
+    else res.status(200).send({ comments })
     }).catch((err) => {
       next(err)
     })
