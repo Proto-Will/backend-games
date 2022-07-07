@@ -267,7 +267,7 @@ describe('app', () => {
               expect.objectContaining({
                 comment_id: expect.any(Number),
                 body: expect.any(String),
-                review_id: expect.any(Number),
+                review_id: 3,
                 author: expect.any(String),
                 votes: expect.any(Number),
                 created_at: expect.any(String)
