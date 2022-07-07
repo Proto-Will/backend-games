@@ -63,3 +63,11 @@ selectAllReviews = () => {
         return reviews.rows;
     })
 };
+
+selectReviewCommentsById = (id) => {
+  return db.query(`SELECT comments.*
+                   FROM comments 
+                   WHERE comments.review_id = $1;`, [id]).then((reviews) => {
+      return reviews.rows;
+  })
+};
