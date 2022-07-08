@@ -324,7 +324,7 @@ describe('app', () => {
                   expect(comment).toEqual(finalResult)
             })
         })
-          test('404; handles incorrect id number', () => {
+          test('400; handles incorrect id number', () => {
             const userComment = {
               username: "mallionaire",
               body: "You see tracy medicine isnt an exact science"
@@ -332,7 +332,7 @@ describe('app', () => {
             return request(app)
             .post('/api/reviews/50/comments')
             .send(userComment)
-            .expect(404)
+            .expect(400)
             .then(({body: { msg }}) => {         
               expect(msg).toBe('No review found for review_id: 50')
             })
@@ -349,7 +349,7 @@ describe('app', () => {
             })
           })
           
-          test('404; handles id as string ', () => {
+          test('400; handles id as string ', () => {
             const userComment = {
               username: "mallionaire",
               body: "You see tracy medicine isnt an exact science"
@@ -357,7 +357,7 @@ describe('app', () => {
             return request(app)
             .post('/api/reviews/string/comments')
             .send(userComment)
-            .expect(404)
+            .expect(400)
             .then(({body: { msg }}) => {         
               expect(msg).toBe('Invalid ID')
             })
