@@ -168,7 +168,7 @@ describe('app', () => {
               expect(msg).toBe('Invalid ID')
             })
           })
-      })
+    })
       
     describe("4. GET /api/users", () => {
       test('should return  an array of objects, each object should have the following property -username -name -avatar_url', () => {
@@ -196,9 +196,9 @@ describe('app', () => {
           expect(msg).toBe('Invalid Path')
         })
       })
-      })
+    })
       
-  describe("5. GET /api/reviews/:review_id", () => {
+    describe("5. GET /api/reviews/:review_id", () => {
     test('should return a review object with comment_count added on', () => {
       return request(app)
         .get('/api/reviews/2')
@@ -251,5 +251,56 @@ describe('app', () => {
             })
           })
         })
+    })
+
+    describe("7. GET /api/reviews/:review_id/comments", () => {
+    test('should return an array of comment objects relating to review_id', () => {
+      return request(app)
+        .get('/api/reviews/3/comments')
+        .expect(200)
+        .then(({ body }) => {
+          const { comments } = body;
+          expect(comments).toBeInstanceOf(Array);
+          expect(comments).toHaveLength(3);
+          comments.forEach((comment) => {
+            expect(comment).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                body: expect.any(String),
+                review_id: 3,
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String)
+              })
+            )
+          })
+        })
       })
+      test('404; handles incorrect id', () => {
+        return request(app)
+        .get('/api/reviews/50/comments')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe("No review found for review_id: 50")
+        })
+      })
+      test('204; handles id with no comments', () => {
+        return request(app)
+        .get('/api/reviews/1/comments')
+        .expect(200)
+        .then(({body: { comments }}) => {
+          expect(comments).toEqual([])
+        })
+      })
+      test('404; handles id that is not a number', () => {
+        return request(app)
+        .get('/api/reviews/bad_request/comments')
+        .expect(404)
+        .then(({body: { msg }}) => {
+          expect(msg).toBe('Invalid ID')
+        })
+      })
+    })
+    
+    
 })
