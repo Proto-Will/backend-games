@@ -84,7 +84,6 @@ postReviewCommentById = (id, userComment) => {
 
   const body = userComment.body
   const username = userComment.username
-  console.log(userComment)
   return db.query(`SELECT * FROM reviews WHERE reviews.review_id = $1;`, [id]).then((reviews) => {
       if (!reviews.rows[0]) { return Promise.reject({ status: 404, msg: `No review found for review_id: ${id}`, })}}).then(() => {
         return db.query("INSERT INTO comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING *;", [username, body, id])
