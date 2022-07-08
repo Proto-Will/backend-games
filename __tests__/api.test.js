@@ -276,20 +276,20 @@ describe('app', () => {
           })
         })
       })
-      test('204; handles incorrect id', () => {
+      test('404; handles incorrect id', () => {
         return request(app)
         .get('/api/reviews/50/comments')
-        .expect(204)
+        .expect(404)
         .then(({body: { msg }}) => {
-          expect(msg).toBe(undefined)
+          expect(msg).toBe("No review found for review_id: 50")
         })
       })
       test('204; handles id with no comments', () => {
         return request(app)
         .get('/api/reviews/1/comments')
-        .expect(204)
-        .then(({body: { msg }}) => {
-          expect(msg).toBe(undefined)
+        .expect(200)
+        .then(({body: { comments }}) => {
+          expect(comments).toEqual([])
         })
       })
       test('404; handles id that is not a number', () => {

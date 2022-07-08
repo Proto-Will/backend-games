@@ -71,9 +71,10 @@ selectReviewCommentsById = (id) => {
         msg: `Invalid ID`,
       });
     }
-    return db.query(`SELECT comments.*
-                    FROM comments 
-                    WHERE comments.review_id = $1;`, [id]).then((comments) => {
-    return comments.rows;
-  })
+    return db.query(`SELECT * FROM reviews WHERE reviews.review_id = $1;`, [id]).then((reviews) => {
+      const review = reviews.rows[0];
+        if (!review) { return Promise.reject({ status: 404, msg: `No review found for review_id: ${id}`, })}}).then(() => {
+            return db.query(`SELECT * FROM comments WHERE comments.review_id = $1;`, [id]).then((comments) => {
+                return comments.rows;})
+                  })
 };
