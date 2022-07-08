@@ -72,9 +72,24 @@ selectReviewCommentsById = (id) => {
       });
     }
     return db.query(`SELECT * FROM reviews WHERE reviews.review_id = $1;`, [id]).then((reviews) => {
-      const review = reviews.rows[0];
-        if (!review) { return Promise.reject({ status: 404, msg: `No review found for review_id: ${id}`, })}}).then(() => {
+        if (!reviews.rows[0]) { return Promise.reject({ status: 404, msg: `No review found for review_id: ${id}`, })}}).then(() => {
             return db.query(`SELECT * FROM comments WHERE comments.review_id = $1;`, [id]).then((comments) => {
                 return comments.rows;})
                   })
 };
+
+postReviewCommentById = (id, userComment) => {
+  if (userComment === "invalid") return Promise.reject({status: 404, msg: "Invalid Packet"})
+  if (isNaN(parseFloat(id))) return Promise.reject({status: 400, msg: `Invalid ID`,});
+
+  const body = userComment.body
+  const username = userComment.username
+  return db.query(`SELECT * FROM reviews WHERE reviews.review_id = $1;`, [id]).then((reviews) => {
+      if (!reviews.rows[0]) { return Promise.reject({ status: 400, msg: `No review found for review_id: ${id}`, })}}).then(() => {
+        return db.query("INSERT INTO comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING *;", [username, body, id])
+            .then((comment) => {
+                return comment.rows[0];
+              })
+      })
+  
+}

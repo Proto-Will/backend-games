@@ -230,7 +230,6 @@ describe('app', () => {
           .expect(200)
           .then(({ body }) => {
             const { reviews } = body;
-            expect(reviews).toBeSortedBy('created_at', {descending: true});
             expect(reviews).toBeInstanceOf(Array);
             expect(reviews).toHaveLength(6);
             reviews.forEach((review) => {
@@ -284,7 +283,7 @@ describe('app', () => {
           expect(msg).toBe("No review found for review_id: 50")
         })
       })
-      test('204; handles id with no comments', () => {
+      test('200; handles id with no comments', () => {
         return request(app)
         .get('/api/reviews/1/comments')
         .expect(200)
@@ -302,5 +301,66 @@ describe('app', () => {
       })
     })
     
-    
+    describe("8. POST /api/reviews/:review_id/comments", () => {
+        test('should take an object in the form `{ inc_votes: newVote } and update it to new value', () => {
+          const userComment = {
+            username: "mallionaire",
+            body: "You see tracy medicine isnt an exact science"
+          };
+          const finalResult = {
+            comment_id: expect.any(Number),
+            author: "mallionaire",
+            body: "You see tracy medicine isnt an exact science",
+            review_id: 2,
+            created_at: expect.any(String),
+            votes: 0
+          }  
+          return request(app)
+            .post('/api/reviews/2/comments')
+            .send(userComment)
+            .expect(201)
+            .then(({ body }) => {
+              const { comment } = body;
+                  expect(comment).toEqual(finalResult)
+            })
+        })
+          test('400; handles incorrect id number', () => {
+            const userComment = {
+              username: "mallionaire",
+              body: "You see tracy medicine isnt an exact science"
+            };
+            return request(app)
+            .post('/api/reviews/50/comments')
+            .send(userComment)
+            .expect(400)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('No review found for review_id: 50')
+            })
+          })
+          
+          test('404; handles incorrect packet info', () => {
+            const newReviewInfo = {};
+            return request(app)
+            .post('/api/reviews/2/comments')
+            .send(newReviewInfo)
+            .expect(404)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('Invalid Packet')
+            })
+          })
+          
+          test('400; handles id as string ', () => {
+            const userComment = {
+              username: "mallionaire",
+              body: "You see tracy medicine isnt an exact science"
+            };
+            return request(app)
+            .post('/api/reviews/string/comments')
+            .send(userComment)
+            .expect(400)
+            .then(({body: { msg }}) => {         
+              expect(msg).toBe('Invalid ID')
+            })
+          })
+    })
 })

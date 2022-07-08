@@ -47,3 +47,14 @@ getReviewComments = (req, res, next) => {
       next(err)
     })
 }
+
+postReviewComment = (req, res, next) => {
+  const {review_id} = req.params;
+    let userComment = req.body;
+    if (!userComment.body) userComment = "invalid"
+    postReviewCommentById(review_id, userComment).then((comment) => {
+      res.status(201).send({ comment })
+    }).catch((err) => {
+      next(err)
+    })
+}
