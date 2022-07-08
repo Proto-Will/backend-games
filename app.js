@@ -12,6 +12,7 @@ app.patch('/api/reviews/:review_id', patchReviewById);
 app.get('/api/users', getUsers);
 app.get('/api/reviews', getReviews);
 app.get('/api/reviews/:review_id/comments', getReviewComments)
+app.post('/api/reviews/:review_id/comments', postReviewComment)
 
 
 app.all('*', (req, res) => {
