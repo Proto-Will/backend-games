@@ -1,5 +1,10 @@
 require("../models/model")
+const endpoints = require("../endpoints.json")
 
+
+getEndpoints = (req, res) => {
+      res.status(200).send({ endpoints })
+}
 
 getCategories = (req, res) => {
   selectAllCategories().then((categories) => {
